@@ -1,29 +1,27 @@
 import React, { useEffect } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import api from "../../services/api";
+import { useAuth } from "../../hooks/auth";
 
 const Callback: React.FC = () => {
   const params = useParams();
   const { search } = useLocation();
-  const [user, setUser] = useLocalStorage("@givepoints:user");
-  const [token, setToken] = useLocalStorage("@givepoints:token");
+  const {
+    handleSignIn,
+    data: { user },
+  } = useAuth();
 
   const handleAuth = async () => {
-    const { data } = await api.get(`auth/callback/${params.provider}${search}`);
-
-    setUser(data.user);
-    setToken(data.token);
+    handleSignIn(params.provider!, search);
   };
 
   useEffect(() => {
     handleAuth();
   }, []);
 
-  return user.twitchLogged && user.twitterLogged ? (
-    <Navigate replace to="/dashboard" />
-  ) : (
+  return user?.twitchLogged && user?.twitterLogged ? (
     <Navigate replace to="/" />
+  ) : (
+    <Navigate replace to="/signin" />
   );
 };
 
