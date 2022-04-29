@@ -1,7 +1,9 @@
+import { Button, ButtonGroup } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/layout";
 import { Navigate } from "react-router-dom";
+import { FaTwitch, FaTwitter } from "react-icons/fa";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import api from "../../services/api";
-import "./styles.css";
 
 const Home: React.FC = () => {
   const [user] = useLocalStorage("@givepoints:user");
@@ -26,15 +28,36 @@ const Home: React.FC = () => {
   return user.twitterLogged && user.twitchLogged ? (
     <Navigate replace to="/dashboard" />
   ) : (
-    <section className="content">
-      <button type="button" onClick={handleTwitchSignin}>
-        Twitch Sign in
-      </button>
-      <br />
-      <button type="button" onClick={handleTwitterSignin}>
-        Twitter Sign in
-      </button>
-    </section>
+    <Box
+      boxSize="full"
+      alignItems="center"
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+    >
+      <ButtonGroup width="lg" flexDirection="column" gap={10}>
+        <Button
+          size="lg"
+          type="button"
+          colorScheme="purple"
+          leftIcon={<FaTwitch />}
+          marginInlineStart="0 !important"
+          onClick={handleTwitchSignin}
+        >
+          Twitch Sign in
+        </Button>
+        <Button
+          size="lg"
+          type="button"
+          colorScheme="twitter"
+          leftIcon={<FaTwitter />}
+          marginInlineStart="0 !important"
+          onClick={handleTwitterSignin}
+        >
+          Twitter Sign in
+        </Button>
+      </ButtonGroup>
+    </Box>
   );
 };
 
