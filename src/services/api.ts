@@ -8,7 +8,6 @@ api.interceptors.request.use((config: AxiosRequestConfig) => {
   const token = localStorage.getItem("@givepoints:token");
 
   if (token) {
-    console.log({ token });
     config.headers.Authorization = `Bearer ${token}`;
   }
 

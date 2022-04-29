@@ -13,10 +13,8 @@ const useLocalStorage = (key: string, initialValue = "") => {
 
   const setValue = useCallback(
     (value) => {
-      console.log({ value });
       try {
         setState(value);
-        console.log(typeof value);
         if (typeof value === "string") {
           return localStorage.setItem(key, value);
         }
