@@ -5,6 +5,7 @@ import PrivateRoute from "./PrivateRoute";
 import Callback from "../pages/Callback";
 import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
+import User from "../pages/User";
 
 const Routes: React.FC = () => (
   <RoutesElement>
@@ -15,6 +16,14 @@ const Routes: React.FC = () => (
       element={
         <PrivateRoute>
           <Home />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      path="/user"
+      element={
+        <PrivateRoute>
+          <User />
         </PrivateRoute>
       }
     />

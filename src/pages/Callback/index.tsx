@@ -6,16 +6,12 @@ const Callback: React.FC = () => {
   const params = useParams();
   const { search } = useLocation();
   const {
-    handleSignIn,
     data: { user },
+    handleSignIn,
   } = useAuth();
 
-  const handleAuth = async () => {
-    handleSignIn(params.provider!, search);
-  };
-
   useEffect(() => {
-    handleAuth();
+    handleSignIn(params.provider!, search);
   }, []);
 
   return user?.twitchLogged && user?.twitterLogged ? (

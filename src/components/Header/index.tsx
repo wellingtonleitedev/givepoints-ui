@@ -1,16 +1,10 @@
-import { Text, Box, Button } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import React from "react";
-
-// import { Container } from './styles';
+import { Box, Button, Link, Avatar } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
+import { useAuth } from "../../hooks/auth";
 
 const Header: React.FC = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
-  };
+  const { handleLogout } = useAuth();
 
   return (
     <Box
@@ -21,12 +15,17 @@ const Header: React.FC = () => {
       paddingY="1.5"
       paddingX="10"
     >
-      <Text textColor="gray.900" fontSize="20">
+      <Link as={RouterLink} to="/" textColor="gray.900" fontSize="20">
         Givepoints
-      </Text>
-      <Button type="button" colorScheme="purple" onClick={handleLogout}>
-        Logout
-      </Button>
+      </Link>
+      <Box display="flex" alignItems="center" gap="5">
+        <Button type="button" colorScheme="purple" onClick={handleLogout}>
+          Logout
+        </Button>
+        <Link as={RouterLink} to="user">
+          <Avatar colorScheme="purple" />
+        </Link>
+      </Box>
     </Box>
   );
 };

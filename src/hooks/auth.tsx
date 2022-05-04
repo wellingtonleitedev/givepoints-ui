@@ -3,6 +3,7 @@ import api from "../services/api";
 
 interface AuthProps {
   data: AuthState;
+  loading: boolean;
   handleSignIn(provider: string, search: string): void;
   handleLogout(): void;
 }
@@ -25,6 +26,7 @@ interface User {
 const AuthContext = createContext({} as AuthProps);
 
 const AuthProvider: React.FC = ({ children }) => {
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState<AuthState>(() => {
     const user = localStorage.getItem("@givepoints:user");
     const token = localStorage.getItem("@givepoints:token");
@@ -42,16 +44,24 @@ const AuthProvider: React.FC = ({ children }) => {
   });
 
   const handleSignIn = useCallback(async (provider: string, search: string) => {
-    const {
-      data: { user, token },
-    } = await api.get(`auth/callback/${provider}${search}`);
+    try {
+      setLoading(true);
 
-    localStorage.setItem("@givepoints:user", JSON.stringify(user));
-    localStorage.setItem("@givepoints:token", token);
+      const {
+        data: { user, token },
+      } = await api.get(`auth/callback/${provider}${search}`);
 
-    api.defaults.headers.authorization = `Bearer ${token}`;
+      localStorage.setItem("@givepoints:user", JSON.stringify(user));
+      localStorage.setItem("@givepoints:token", token);
 
-    setData({ user, token });
+      api.defaults.headers.authorization = `Bearer ${token}`;
+
+      setData({ user, token });
+    } catch (error) {
+      console.log({ error });
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const handleLogout = useCallback(() => {
@@ -62,7 +72,7 @@ const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ data, handleSignIn, handleLogout }}>
+    <AuthContext.Provider value={{ data, loading, handleSignIn, handleLogout }}>
       {children}
     </AuthContext.Provider>
   );
